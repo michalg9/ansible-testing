@@ -1,4 +1,4 @@
-- hosts: myhosts
+- hosts: all
   roles:
     - role: "webserver"
       become: true
