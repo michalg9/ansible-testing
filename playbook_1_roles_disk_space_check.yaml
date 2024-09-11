@@ -7,11 +7,13 @@
     shell: df -h / | awk 'NR==2 {print $4}'
     register: disk_space
     changed_when: false
+    when: not ansible_check_mode
 
   - name: "Fail if available disk space is less than {{ disk_space_threshold }} GB"
     fail:
       msg: "Available disk space on {{ inventory_hostname }} is {{ disk_space.stdout }}. Threshold is {{ disk_space_threshold }} GB."
     when: (disk_space.stdout | regex_replace('G','') | float ) < (disk_space_threshold | float)
+    when: not ansible_check_mode
   
   - name: include webserver role
     include_role: 
