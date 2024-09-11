@@ -1,6 +1,6 @@
 - hosts: all
   vars:
-    disk_space_threshold: 20.0  # Default value of 20GB
+    disk_space_threshold: 10  # Default value of 10GB
 
   tasks:
   - name: "Check available disk space on / (fail when it's less than {{ disk_space_threshold }} GB)"
