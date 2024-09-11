@@ -1,12 +1,18 @@
 - hosts: all
+  vars:
+    disk_space_threshold: 20.0  # Default value of 20GB
 
   tasks:
-  - name: Check available disk space on / (fail if less than 10GB available)
-    command: df -h / | awk 'NR==2 {print $4}'
+  - name: "Check available disk space on / (fail when it's less than {{ disk_space_threshold }} GB)"
+    shell: df -h / | awk 'NR==2 {print $4}'
     register: disk_space
     changed_when: false
-    failed_when: disk_space.stdout | regex_replace('G','') | float < 10.0
 
+  - name: "Fail if available disk space is less than {{ disk_space_threshold }} GB"
+    fail:
+      msg: "Available disk space on {{ inventory_hostname }} is {{ disk_space.stdout }}. Threshold is {{ disk_space_threshold }} GB."
+    when: (disk_space.stdout | regex_replace('G','')) < disk_space_threshold
+  
   - name: include webserver role
     include_role: 
       name: "webserver"
