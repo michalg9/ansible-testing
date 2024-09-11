@@ -8,14 +8,16 @@
     failed_when: disk_space.stdout | regex_replace('G','') | float < 10.0
 
   - name: include webserver role
-    become: true
     include_role: 
       name: "webserver"
+      apply:
+        become: true
 
   - name: include geerlingguy.java role
-    become: true
     include_role: 
       name: geerlingguy.java
+      apply:
+        become: true
 
   - name: Touch a file, using symbolic modes to set the permissions (equivalent to 0644)
     become: true
