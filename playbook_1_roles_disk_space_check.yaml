@@ -11,7 +11,7 @@
   - name: "Fail if available disk space is less than {{ disk_space_threshold }} GB"
     fail:
       msg: "Available disk space on {{ inventory_hostname }} is {{ disk_space.stdout }}. Threshold is {{ disk_space_threshold }} GB."
-    when: (disk_space.stdout | regex_replace('G','')) < disk_space_threshold
+    when: (disk_space.stdout | regex_replace('G','') | float ) < (disk_space_threshold | float)
   
   - name: include webserver role
     include_role: 
